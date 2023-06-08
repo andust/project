@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  go-workspace:
+    build:
+      context: .
+      dockerfile: ./docker/containers/go-workspace.dockerfile
+    tty: true
+    working_dir: /app/
+    volumes:
+      - ../site-service/:/app/site-service/
+      - ../internal/:/app/internal/
+      - ./docker/go/:/go/
+
+  site-service:
+    container_name: site-service
+    hostname: site-service
+    image: site-service
+    build:
+      context: ../site-service
+    ports:
+      - "80:80"
+    env_file:
+      - ./.site-service.env
+
+  site-service-mongo:
+    image: mongo:6.0.2
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: site_service_db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./docker/db-data/mongo/:/data/db
+
+
+  site-front:
+    container_name: site-front
+    hostname: site-front
+    image: site-front
+    build:
+      context: ../site-front
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../site-front:/site-front
