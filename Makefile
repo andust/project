@@ -1,5 +1,3 @@
-# include .site-service.env
-
 GO_WORKSPACE=go-workspace
 
 GO_DOCKER=golang:1.20-alpine
@@ -9,7 +7,6 @@ SITE_BINARY=siteApp
 
 init:
 	docker run --rm -v $(PWD)/../$(SITE_SERVICE)/:/app/$(SITE_SERVICE) -w /app/$(SITE_SERVICE) $(GO_DOCKER) sh -c "go build -o $(SITE_BINARY) ./cmd/service"
-	docker run --rm -v $(PWD)/../$(FLAT_INPUT_SERVICE)/:/app/$(FLAT_INPUT_SERVICE) -w /app/$(FLAT_INPUT_SERVICE) $(GO_DOCKER) sh -c "go build -o $(FLAT_INPUT_BINARY) ./cmd/service"
 
 up:
 	@echo "Starting docker images..."
