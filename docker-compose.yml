@@ -21,7 +21,10 @@ services:
     ports:
       - "80:80"
     env_file:
-      - ./.site-service.env
+      - ../site-service/.site-service.env
+    volumes:
+      - ../site-service/media/:/site-service/media/
+
 
   site-service-mongo:
     image: mongo:6.0.2
@@ -34,7 +37,6 @@ services:
     volumes:
       - ./docker/db-data/mongo/:/data/db
 
-
   site-front:
     container_name: site-front
     hostname: site-front
@@ -45,3 +47,4 @@ services:
       - "3000:3000"
     volumes:
       - ../site-front:/site-front
+      - ../site-front/node_modules:/site-front/node_modules
